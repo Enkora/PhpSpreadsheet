@@ -130,21 +130,31 @@ class Styles extends BaseParserClass
 
     private static function readAlignmentStyle(Alignment $alignment, \SimpleXMLElement $alignmentXml)
     {
-        $alignment->setHorizontal((string) $alignmentXml->alignment['horizontal']);
-        $alignment->setVertical((string) $alignmentXml->alignment['vertical']);
+        $alignment_array = !empty($alignmentXml->alignment)
+            ? $alignmentXml->alignment
+            : [
+                'horizontal' => '',
+                'vertical' => '',
+                'wrapText' => false,
+                'shrinkToFit' => false,
+                'indent' => 0,
+                'readingOrder' => 0,
+            ];
+        $alignment->setHorizontal((string) $alignment_array['horizontal']);
+        $alignment->setVertical((string) $alignment_array['vertical']);
 
         $textRotation = 0;
-        if ((int) $alignmentXml->alignment['textRotation'] <= 90) {
-            $textRotation = (int) $alignmentXml->alignment['textRotation'];
-        } elseif ((int) $alignmentXml->alignment['textRotation'] > 90) {
-            $textRotation = 90 - (int) $alignmentXml->alignment['textRotation'];
+        if ((int) $alignment_array['textRotation'] <= 90) {
+            $textRotation = (int) $alignment_array['textRotation'];
+        } elseif ((int) $alignment_array['textRotation'] > 90) {
+            $textRotation = 90 - (int) $alignment_array['textRotation'];
         }
 
         $alignment->setTextRotation((int) $textRotation);
-        $alignment->setWrapText(self::boolean((string) $alignmentXml->alignment['wrapText']));
-        $alignment->setShrinkToFit(self::boolean((string) $alignmentXml->alignment['shrinkToFit']));
-        $alignment->setIndent((int) ((string) $alignmentXml->alignment['indent']) > 0 ? (int) ((string) $alignmentXml->alignment['indent']) : 0);
-        $alignment->setReadOrder((int) ((string) $alignmentXml->alignment['readingOrder']) > 0 ? (int) ((string) $alignmentXml->alignment['readingOrder']) : 0);
+        $alignment->setWrapText(self::boolean((string) $alignment_array['wrapText']));
+        $alignment->setShrinkToFit(self::boolean((string) $alignment_array['shrinkToFit']));
+        $alignment->setIndent((int) ((string) $alignment_array['indent']) > 0 ? (int) ((string) $alignment_array['indent']) : 0);
+        $alignment->setReadOrder((int) ((string) $alignment_array['readingOrder']) > 0 ? (int) ((string) $alignment_array['readingOrder']) : 0);
     }
 
     private function readStyle(Style $docStyle, $style)
