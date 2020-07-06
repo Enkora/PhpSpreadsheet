@@ -135,6 +135,7 @@ class Styles extends BaseParserClass
             : [
                 'horizontal' => '',
                 'vertical' => '',
+                'textRotation' => 0,
                 'wrapText' => false,
                 'shrinkToFit' => false,
                 'indent' => 0,
